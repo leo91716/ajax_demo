@@ -40,14 +40,20 @@ def index():
 
 # @app.route('/ajax_comment',methods=['POST'])
 def ajax_comment(*args, **kwargs):
-    note=Note(**request.form)
+    note=Note(**kwargs)
     db.session.add(note)
     db.session.commit()
     return {'msg':'success'}
 
 
 def add_func_url(func,method):
-    app.add_url_rule(f'/{func.__name__}', func.__name__, func,methods=[method])
+    def middleware():
+        return func(**request.form)
+
+    app.add_url_rule(f'/{func.__name__}', func.__name__, middleware,methods=[method])
+
+
+
 
 add_func_url(index,'GET')
 add_func_url(ajax_comment,'POST')
