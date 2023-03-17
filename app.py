@@ -39,8 +39,8 @@ def index():
     return render_template('index.html',notes=notes)
 
 # @app.route('/ajax_comment',methods=['POST'])
-def ajax_comment(*args, **kwargs):
-    note=Note(**kwargs)
+def ajax_comment(title, comment):
+    note=Note(title=title,comment=comment)
     db.session.add(note)
     db.session.commit()
     return {'msg':'success'}
